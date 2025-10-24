@@ -1,0 +1,26 @@
+/* Use IBM Plex Sans everywhere via PrimeVue's --font-family token */
+:root {
+  --font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-family);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings tuned for a professional UI look */
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.01em; }
+h4, h5, h6 { font-weight: 600; }
+
+/* Optional sizes that sit nicely with PrimeVue spacing */
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+/* Ensure UI controls inherit */
+button, .p-button, .p-inputtext { font-family: var(--font-family); }

@@ -1,0 +1,88 @@
+[
+  {
+    "slug": "demo",
+    "name": "Demo",
+    "subtitle": "Dit is een demo applicatie",
+    "summary": "Dit is om te testen dat de velden die ik heb gebruikt allemaal werken en dat dit ook goed visueel wordt weergegeven.",
+    "stage": "pilots",
+    "orgType": "commercieel",
+    "categories": [
+      "Test",
+      "Clappform",
+      "Demo"
+    ],
+    "approved": "changes_requested",
+    "media": {
+      "logoUrl": "https://cdn.dorik.com/60c756c05ab9ac0011af66ae/6249b9269f34ad00115b5351/images/Clappform-logo_x1alht5b.svg",
+      "screenshots": []
+    },
+    "descriptionMd": "",
+    "pricing": {
+      "type": "subscription",
+      "price": 200,
+      "currency": "EUR",
+      "interval": "year"
+    },
+    "criteria": {
+      "open_source": {
+        "met": false
+      },
+      "modular": {
+        "met": false
+      },
+      "dpia": {
+        "met": false
+      },
+      "license_clarity": {
+        "met": true
+      },
+      "a11y": {
+        "met": false
+      },
+      "ai_risk_cat": {
+        "met": true
+      },
+      "functional_desc": {
+        "met": true
+      },
+      "self_hostable": {
+        "met": true
+      },
+      "tech_explainer": {
+        "met": true
+      }
+    },
+    "labels": {
+      "external_support": {
+        "has": true
+      },
+      "human_rights_assessment": {
+        "has": true
+      },
+      "gov_built": {
+        "has": true
+      },
+      "user_guide": {
+        "has": true
+      },
+      "open_inference_api": {
+        "has": false
+      }
+    },
+    "org": {
+      "name": "Rijksoverheid",
+      "url": "https://www.rijksoverheid.nl"
+    },
+    "versions": [
+      {
+        "version": "1.0.0",
+        "date": "2025-09-24T07:36:37.946Z",
+        "notes": ""
+      }
+    ],
+    "reviews": [],
+    "related": [],
+    "updatedAt": "2025-09-29T12:48:47.594Z",
+    "imageName": "nginx:latest"
+  }
+]
