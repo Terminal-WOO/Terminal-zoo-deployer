@@ -1,0 +1,195 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: rg.nl-ams.scw.cloud
+  FRONTEND_IMAGE: ${{ env.REGISTRY }}/${{ secrets.SCR_NAMESPACE }}/ai-co
+  BACKEND_IMAGE: ${{ env.REGISTRY }}/${{ secrets.SCR_NAMESPACE }}/ipo-deployer
+
+jobs:
+  build-frontend:
+    name: Build Frontend Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Scaleway Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.SCR_USERNAME }}
+          password: ${{ secrets.SCR_SECRET_KEY }}
+
+      - name: Extract metadata (tags, labels) for Frontend
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.FRONTEND_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Frontend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-backend:
+    name: Build Backend Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Scaleway Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.SCR_USERNAME }}
+          password: ${{ secrets.SCR_SECRET_KEY }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Build Go binary
+        working-directory: ./go
+        run: |
+          make build
+
+      - name: Extract metadata (tags, labels) for Backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.BACKEND_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Backend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./go
+          file: ./go/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Scaleway CLI
+        uses: scaleway/scaleway-cli-action@v1
+        with:
+          secret-key: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          access-key: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure kubectl for Scaleway Kubernetes
+        run: |
+          # Install kubeconfig voor het cluster
+          scw k8s kubeconfig install ${{ secrets.SCALEWAY_K8S_CLUSTER_ID }} --write-to-file
+          
+          # Verifieer connectie
+          kubectl get nodes
+
+      - name: Deploy to Kubernetes
+        run: |
+          # Bepaal image tags (gebruik commit SHA voor traceerbaarheid)
+          export FRONTEND_TAG="main-${GITHUB_SHA::7}"
+          export BACKEND_TAG="main-${GITHUB_SHA::7}"
+          export FRONTEND_IMAGE="${{ env.FRONTEND_IMAGE }}:${FRONTEND_TAG}"
+          export BACKEND_IMAGE="${{ env.BACKEND_IMAGE }}:${BACKEND_TAG}"
+          
+          echo "Deploying frontend: ${FRONTEND_IMAGE}"
+          echo "Deploying backend: ${BACKEND_IMAGE}"
+          
+          # Apply namespace first
+          kubectl apply -f k8s/namespace.yaml
+          
+          # Apply configmap
+          kubectl apply -f k8s/configmap.yaml
+          
+          # Update image tags in deployment files (tijdelijk)
+          sed -i.bak "s|image:.*ai-co:.*|image: ${FRONTEND_IMAGE}|g" k8s/frontend-deployment.yaml
+          sed -i.bak "s|image:.*ipo-deployer:.*|image: ${BACKEND_IMAGE}|g" k8s/backend-deployment.yaml
+          
+          # Apply deployments
+          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/frontend-service.yaml
+          kubectl apply -f k8s/backend-service.yaml
+          
+          # Restore original files
+          mv k8s/frontend-deployment.yaml.bak k8s/frontend-deployment.yaml 2>/dev/null || true
+          mv k8s/backend-deployment.yaml.bak k8s/backend-deployment.yaml 2>/dev/null || true
+          
+          # Wait for rollout met timeout
+          kubectl rollout status deployment/nuxt-frontend -n terminal-zoo --timeout=5m || {
+            echo "Frontend rollout failed, showing logs:"
+            kubectl logs -l app=nuxt-frontend -n terminal-zoo --tail=50
+            exit 1
+          }
+          
+          kubectl rollout status deployment/go-backend -n terminal-zoo --timeout=5m || {
+            echo "Backend rollout failed, showing logs:"
+            kubectl logs -l app=go-backend -n terminal-zoo --tail=50
+            exit 1
+          }
+
+      - name: Verify deployment
+        run: |
+          echo "=== Pods Status ==="
+          kubectl get pods -n terminal-zoo -o wide
+          
+          echo -e "\n=== Services ==="
+          kubectl get services -n terminal-zoo
+          
+          echo -e "\n=== Ingress ==="
+          kubectl get ingress -n terminal-zoo || echo "No ingress configured"
+          
+          echo -e "\n=== Deployment Status ==="
+          kubectl get deployments -n terminal-zoo
+          
+          echo -e "\n=== Recent Events ==="
+          kubectl get events -n terminal-zoo --sort-by='.lastTimestamp' | tail -10
+

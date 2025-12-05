@@ -1,5 +1,5 @@
 # Build stage
-FROM node:24.6.0-alpine3.22 AS builder
+FROM --platform=linux/amd64 node:24.6.0-alpine3.22 AS builder
 
 # Set build-time environment
 ENV NODE_ENV=production
@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:24.6.0-alpine3.22 AS production
+FROM --platform=linux/amd64 node:24.6.0-alpine3.22 AS production
 
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init

@@ -89,7 +89,7 @@ const props = withDefaults(defineProps<{
   sticky?: boolean
   elevated?: boolean
   showSearch?: boolean
-}>(), { brand: 'IPO appstore', sticky: true, elevated: true, showSearch: true })
+}>(), { brand: 'App Store', sticky: true, elevated: true, showSearch: true })
 
 const emit = defineEmits<{ (e:'search', q:string): void }>()
 

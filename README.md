@@ -1,6 +1,20 @@
-# Nuxt Minimal Starter
+# App Store - AI Application Deployment Platform
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Een moderne applicatie voor het deployen en beheren van AI-toepassingen, gebouwd met Nuxt.js (frontend) en Go (backend).
+
+## Overzicht
+
+De applicatie bestaat uit:
+- **Frontend**: Nuxt.js applicatie met moderne UI
+- **Backend**: Go Kubernetes API server voor deployment management
+- **Infrastructuur**: Kubernetes cluster op Scaleway met container registry
+
+## Features
+
+- Transparante AI-oplossingen met betrouwbare criteria
+- Community-monitoring en bouwstenen
+- Snelle en veilige implementaties
+- Kubernetes-native deployment
 
 ## Setup
 

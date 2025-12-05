@@ -4,20 +4,15 @@
       <div class="grid">
         <div class="col-12 md:col-6">
           <div class="flex align-items-center gap-2 mb-2">
-            <BrandLogo size="md" class="mb-3" logoUrl="default" />
+            <BrandLogo size="md" class="mb-3" />
           </div>
           <p class="m-0 text-700">
             Transparante AI-oplossingen met betrouwbare criteria, community-monitoring en bouwstenen
             voor snelle en veilige implementaties.
           </p>
           <p class="m-0 text-700 mt-2">
-            Deze website is ontwikkeld door Clappform B.V. in opdracht van IPO en provincie Zuid Holland. 
+            Deze website is ontwikkeld door Clappform B.V.
           </p>
-
-          <div class="mt-2 flex align-items-center">
-            <BrandLogo size="md" variant="ipo" />
-            <BrandLogo size="md" variant="pzh" class="ml-3" />
-          </div>
         </div>
 
         <div class="col-6 md:col-3">

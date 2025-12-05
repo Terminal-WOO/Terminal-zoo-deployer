@@ -26,6 +26,14 @@ export default defineNuxtConfig({
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap'
         },
+        {
+          rel: 'stylesheet',
+          href: 'https://www.rijksoverheid.nl/webfiles/1750011834072/presentation/responsive.css'
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://www.rijksoverheid.nl/webfiles/1750011834072/presentation/themes/logoblauw.css'
+        },
       ]
     }
   },
@@ -43,9 +51,9 @@ export default defineNuxtConfig({
           "X-Frame-Options": "sameorigin",
           "Content-Security-Policy": `default-src 'self';
             script-src  'self' 'unsafe-inline' 'unsafe-eval';
-            style-src   'self' 'unsafe-inline';
-            img-src     'self' data: https://clappformimages.blob.core.windows.net;
-            font-src    'self';
+            style-src   'self' 'unsafe-inline' https://fonts.googleapis.com https://www.rijksoverheid.nl;
+            img-src     'self' data: https://clappformimages.blob.core.windows.net https://www.rijksoverheid.nl;
+            font-src    'self' https://fonts.gstatic.com;
             connect-src 'self' https://*.clappform.com http://localhost:8080;
             frame-ancestors 'none';
             object-src  'none';

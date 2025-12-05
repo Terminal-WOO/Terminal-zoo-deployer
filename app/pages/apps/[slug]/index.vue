@@ -280,7 +280,7 @@ const { data: appData } = await useAsyncData(`app:${slug}`, () => catalog.fetchO
 const app = computed<any>(() => appData.value)
 
 useSeoMeta({
-  title: () => app.value ? `${app.value.name} — IPO appstore` : 'IPO appstore',
+  title: () => app.value ? `${app.value.name} — App Store` : 'App Store',
   description: () => app.value?.subtitle || 'ML-app of bouwsteen uit de catalogus.'
 })
 

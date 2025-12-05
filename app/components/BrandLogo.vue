@@ -7,21 +7,13 @@
 <script setup lang="ts">
 // Default logo comes from /assets (build-time import)
 import defaultLogo from '~/assets/images/logo.svg'
-import ipoLogo from '~/assets/images/logo_ipo.svg'
-import pzhLogo from '~/assets/images/logo_pzh.png'
 
 const props = withDefaults(defineProps<{
   size?: 'xs'|'sm'|'md'|'lg'|'xl'
-  variant?: 'default' | 'ipo' | 'pzh'
+  variant?: 'default'
 }>(), { size: 'md', variant: 'default' })
 
-const logoMap: Record<string, string> = {
-  default: defaultLogo,
-  ipo: ipoLogo,
-  pzh: pzhLogo
-}
-
-const resolvedLogo = computed(() => logoMap[props.variant] || defaultLogo)
+const resolvedLogo = computed(() => defaultLogo)
 const sizeClass = computed(() => `brand--${props.size}`)
 </script>
 

@@ -134,10 +134,10 @@ import { useRouter, useHead } from '#imports'
 definePageMeta({ layout: 'landing' })
 
 useHead({
-  title: 'IPO appstore — Selecteer, Configureer, Deploy',
+  title: 'App Store — Selecteer, Configureer, Deploy',
   meta: [
     { name: 'description', content: 'Vind, beoordeel en deploy AI/ML-applicaties met bouwstenen en duidelijke toelatingseisen & labels.' },
-    { property: 'og:title', content: 'IPO appstore voor de Overheid' },
+    { property: 'og:title', content: 'App Store' },
     { property: 'og:description', content: 'Selecteer, configureer en deploy betrouwbare AI-toepassingen met transparante criteria.' },
     { property: 'og:type', content: 'website' }
   ]
@@ -195,7 +195,7 @@ function stageTag(s: FeaturedApp['stage']) {
 const ldJson = computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'IPO appstore',
+  name: 'App Store',
   url: 'https://example.org',
   potentialAction: {
     '@type': 'SearchAction',

@@ -199,6 +199,10 @@ func NewHandler(opts ...Option) (h *Handler, err error) {
 	h.mux.HandleFunc("POST /configmap", AuthMiddleware(h.handleCreateConfigMap(), ""))
 	h.mux.HandleFunc("GET /configmap/{namespace}", AuthMiddleware(h.handleGetConfigMaps(), ""))
 
+	// Health check endpoints (no auth required)
+	h.mux.HandleFunc("GET /health", h.handleHealth())
+	h.mux.HandleFunc("GET /ready", h.handleReady())
+
 	return h, nil
 }
 
@@ -1186,4 +1190,48 @@ func normalizePEM(s string) ([]byte, error) {
 		return nil, errors.New("no valid certificate found in PEM")
 	}
 	return []byte(raw), nil
+}
+
+// handleHealth returns a simple health check endpoint
+func (h *Handler) handleHealth() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(map[string]string{
+			"status": "healthy",
+		})
+	}
+}
+
+// handleReady returns a readiness check endpoint
+// Checks if the Kubernetes clientset is available
+func (h *Handler) handleReady() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Check if we can connect to Kubernetes
+		if h.clientset == nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_ = json.NewEncoder(w).Encode(map[string]string{
+				"status": "not ready",
+				"reason": "kubernetes client not initialized",
+			})
+			return
+		}
+
+		// Try to get server version as a connectivity check
+		_, err := h.clientset.Discovery().ServerVersion()
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_ = json.NewEncoder(w).Encode(map[string]string{
+				"status": "not ready",
+				"reason": fmt.Sprintf("kubernetes connection failed: %v", err),
+			})
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(map[string]string{
+			"status": "ready",
+		})
+	}
 }
