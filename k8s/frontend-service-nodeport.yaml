@@ -1,0 +1,23 @@
+# NodePort Service - Toegang via node IP + poort
+# Goedkoopste optie (geen Load Balancer kosten)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nuxt-frontend-np
+  namespace: nl-appstore-registry
+  labels:
+    app: nuxt-frontend
+    component: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: http
+      nodePort: 30080  # Toegang via <node-ip>:30080
+      protocol: TCP
+      name: http
+  selector:
+    app: nuxt-frontend
+
+

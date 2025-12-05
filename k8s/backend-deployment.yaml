@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-backend
+  namespace: nl-appstore-registry
+  labels:
+    app: go-backend
+    component: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-backend
+  template:
+    metadata:
+      labels:
+        app: go-backend
+        component: backend
+    spec:
+      # Image pull secret voor Scaleway Container Registry
+      imagePullSecrets:
+        - name: scr-secret
+      containers:
+        - name: go-backend
+          image: rg.nl-ams.scw.cloud/nl-appstore-registry/ipo-deployer:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: AICO_HTTP_LISTEN_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AICO_HTTP_LISTEN_ADDRESS
+            - name: AICO_HTTP_READ_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AICO_HTTP_READ_TIMEOUT
+            - name: AICO_HTTP_WRITE_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AICO_HTTP_WRITE_TIMEOUT
+            - name: AICO_HTTP_IDLE_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AICO_HTTP_IDLE_TIMEOUT
+            - name: AICO_TERMINATION_GRACE_PERIOD
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AICO_TERMINATION_GRACE_PERIOD
+          # Kubernetes in-cluster config wordt automatisch gebruikt
+          # Geen extra configuratie nodig als de pod in het cluster draait
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+

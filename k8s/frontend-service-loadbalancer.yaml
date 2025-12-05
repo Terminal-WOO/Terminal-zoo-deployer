@@ -1,0 +1,22 @@
+# LoadBalancer Service - Krijgt extern IP adres
+# Gebruik deze in plaats van ingress als je geen domain hebt
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nuxt-frontend-lb
+  namespace: nl-appstore-registry
+  labels:
+    app: nuxt-frontend
+    component: frontend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: nuxt-frontend
+
+

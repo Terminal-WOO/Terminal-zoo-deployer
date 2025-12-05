@@ -1,0 +1,37 @@
+# Ingress zonder custom domain - gebruikt IP adres
+# Voor gebruik zonder domeinnaam, gebruik NodePort of LoadBalancer services
+# Deze ingress is optioneel als je geen domain hebt
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: nl-appstore-registry
+  annotations:
+    # Scaleway Load Balancer annotations
+    ingress.scaleway.com/ssl-redirect: "false"  # Geen SSL zonder domain
+spec:
+  ingressClassName: nginx
+  # Geen TLS configuratie zonder domain
+  rules:
+    # Gebruik IP adres of laat leeg voor alle hosts
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nuxt-frontend
+                port:
+                  number: 3000
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: go-backend
+                port:
+                  number: 8080
+
+

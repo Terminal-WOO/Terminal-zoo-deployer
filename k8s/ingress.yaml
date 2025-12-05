@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: nl-appstore-registry
+  annotations:
+    # Scaleway Load Balancer annotations
+    ingress.scaleway.com/ssl-redirect: "true"
+    # Cert-manager voor automatische SSL certificaten (als geïnstalleerd)
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # Of gebruik Scaleway's managed SSL
+    # ingress.scaleway.com/ssl-certificate-id: "your-cert-id"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - nlappstore.nl
+        - www.nlappstore.nl
+        - api.nlappstore.nl
+      secretName: app-tls-secret
+  rules:
+    - host: nlappstore.nl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nuxt-frontend-np
+                port:
+                  number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: go-backend-np
+                port:
+                  number: 8080
+    - host: www.nlappstore.nl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nuxt-frontend-np
+                port:
+                  number: 3000
+    - host: api.nlappstore.nl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: go-backend-np
+                port:
+                  number: 8080
+

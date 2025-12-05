@@ -1,0 +1,23 @@
+# NodePort Service voor Backend - Toegang via node IP + poort
+# Goedkoopste optie (geen Load Balancer kosten)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-backend-np
+  namespace: nl-appstore-registry
+  labels:
+    app: go-backend
+    component: backend
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: http
+      nodePort: 30088  # Toegang via <node-ip>:30088
+      protocol: TCP
+      name: http
+  selector:
+    app: go-backend
+
+

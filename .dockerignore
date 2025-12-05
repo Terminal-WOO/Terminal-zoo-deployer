@@ -1,7 +1,59 @@
-node_modules
+# Git
 .git
-.nuxt
-.output
-*.log
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
 README.md
-go
+deploy/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Kubernetes manifests (niet nodig in image)
+k8s/
+
+# Development files
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.test
+*.out
+coverage.*
+
+# Node (voor frontend)
+node_modules/
+.nuxt/
+.output/
+.data/
+dist/
+
+# Go (voor backend)
+go/bin/
+go/pkg/
+*.mod.sum
+
+# Docker
+docker-compose.yml
+Dockerfile*
+.dockerignore
+
+# Misc
+*.log
+logs/

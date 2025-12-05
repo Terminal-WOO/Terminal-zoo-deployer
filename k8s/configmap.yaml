@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: nl-appstore-registry
+data:
+  # Frontend environment variables
+  # Gebruik service naam voor interne communicatie (aanbevolen)
+  NUXT_EXTERNAL_API_BASE: "http://go-backend:8080"
+  # Of gebruik extern IP als je NodePort/LoadBalancer gebruikt:
+  # NUXT_EXTERNAL_API_BASE: "http://<node-ip>:30088"  # Voor NodePort
+  # NUXT_EXTERNAL_API_BASE: "http://<lb-ip>:8080"     # Voor LoadBalancer
+  NODE_ENV: "production"
+  PORT: "3000"
+  HOST: "0.0.0.0"
+  
+  # Backend environment variables (defaults, can be overridden)
+  AICO_HTTP_LISTEN_ADDRESS: ":8080"
+  AICO_HTTP_READ_TIMEOUT: "10s"
+  AICO_HTTP_WRITE_TIMEOUT: "120s"
+  AICO_HTTP_IDLE_TIMEOUT: "120s"
+  AICO_TERMINATION_GRACE_PERIOD: "5s"
+

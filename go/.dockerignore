@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+README.md
+
+# CI/CD
+.github/
+
+# Development
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Build artifacts (behalve de binary die we nodig hebben)
+*.test
+*.out
+coverage.*
+
+# Source code wordt niet gekopieerd voor normale Dockerfile (alleen de binary)
+# Maar voor multi-stage Dockerfile hebben we de source code nodig!
+# Daarom zijn cmd/, internal/ en pkg/ NIET uitgesloten
+
+# Go files (maar go.mod en go.sum zijn nodig voor build!)
+# *.mod
+# *.sum
+# go.mod
+# go.sum
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Misc
+*.log
+

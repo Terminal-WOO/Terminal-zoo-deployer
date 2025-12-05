@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nl-appstore-registry
+  labels:
+    name: nl-appstore-registry
+    environment: production
+

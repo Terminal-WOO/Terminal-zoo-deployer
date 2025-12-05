@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nl-appstore-registry
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - ingress.yaml
+  # HPA is optioneel - uncomment voor automatische scaling
+  # - hpa.yaml
+
+# Images kunnen worden overschreven via:
+# kustomize edit set image rg.nl-ams.scw.cloud/your-registry/ai-co:new-tag
+# kustomize edit set image rg.nl-ams.scw.cloud/your-registry/ipo-deployer:new-tag
+
+images:
+  - name: rg.nl-ams.scw.cloud/your-registry/ai-co
+    newTag: latest
+  - name: rg.nl-ams.scw.cloud/your-registry/ipo-deployer
+    newTag: latest
+

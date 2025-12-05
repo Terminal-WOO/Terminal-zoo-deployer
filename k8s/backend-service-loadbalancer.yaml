@@ -1,0 +1,22 @@
+# LoadBalancer Service voor Backend - Krijgt extern IP adres
+# Gebruik deze in plaats van ingress als je geen domain hebt
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-backend-lb
+  namespace: nl-appstore-registry
+  labels:
+    app: go-backend
+    component: backend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: go-backend
+
+
