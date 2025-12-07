@@ -29,7 +29,7 @@ Beide componenten worden gedeployed naar een Kubernetes cluster op Scaleway.
 - `docker` voor lokale builds
 - `make` voor build commando's
 
-> **💡 Kubeconfig Setup**: Zorg dat je kubeconfig geconfigureerd hebt voordat je kubectl gebruikt! Zie **[KUBECONFIG_SETUP.md](KUBECONFIG_SETUP.md)**
+> **💡 Kubeconfig Setup**: Zorg dat je kubeconfig geconfigureerd hebt voordat je kubectl gebruikt!
 
 ## Voorbereiding
 

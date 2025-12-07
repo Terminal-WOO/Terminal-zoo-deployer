@@ -2,9 +2,6 @@
 
 Volg deze stappen om automatische deployment naar Scaleway te configureren.
 
-> **⚠️ UI Problemen?** Als je resources ziet maar niets ziet als je erop klikt, zie **[SCALEWAY_UI_TROUBLESHOOTING.md](SCALEWAY_UI_TROUBLESHOOTING.md)** voor hulp.
-
-> **💡 Zone Probleem?** Als je resources niet ziet via CLI, check je default zone: **[SCALEWAY_CLI_CONFIG.md](SCALEWAY_CLI_CONFIG.md)**
 
 ## Stap 1: Scaleway API Keys Aanmaken (5 minuten)
 
@@ -29,11 +26,7 @@ Volg deze stappen om automatische deployment naar Scaleway te configureren.
 
 ## Stap 2: Kubernetes Cluster ID Vinden (10-15 minuten)
 
-> **💡 Tip**: Als je een oude DEV1-S instance hebt die je niet meer nodig hebt, verwijder die eerst om kosten te besparen. Zie **[CLEANUP_OLD_RESOURCES.md](CLEANUP_OLD_RESOURCES.md)** voor instructies.
-
 ### 2.1 Maak een Kubernetes Cluster aan (als je die nog niet hebt)
-
-**📖 Voor gedetailleerde instructies**: Zie **[K8S_CLUSTER_SETUP.md](K8S_CLUSTER_SETUP.md)**
 
 **⚠️ Probleem met leeg cluster?** Zie **[TROUBLESHOOTING_CLUSTER.md](TROUBLESHOOTING_CLUSTER.md)**
 
@@ -87,7 +80,6 @@ scw registry namespace list
 scw registry namespace list | grep nl-appstore-registry
 ```
 
-> **📖 Voor meer CLI commando's**: Zie **[SCW_NAMESPACE_COMMANDS.md](SCW_NAMESPACE_COMMANDS.md)**
 
 ### 3.2 Genereer Registry Secret Key
 1. Ga naar je registry → **Secrets** tab
@@ -98,10 +90,8 @@ scw registry namespace list | grep nl-appstore-registry
 6. Bewaar deze tijdelijk
 
 > **💡 Belangrijk**: De Registry Secret Key is **ANDERS** dan je API Secret Key! 
-> - API Secret Key: Voor Scaleway toegang (van IAM → API Keys)
+> - API Secret Key: Voor cloud provider toegang (van IAM → API Keys)
 > - Registry Secret Key: Alleen voor Container Registry (van Registry → Secrets)
-> 
-> Zie **[SECRET_KEYS_EXPLAINED.md](SECRET_KEYS_EXPLAINED.md)** voor uitleg over het verschil.
 
 ---
 
@@ -138,7 +128,6 @@ kubectl get nodes
 4. **Set permissions**: `chmod 600 ~/.kube/config`
 5. **Test**: `kubectl get nodes`
 
-> **📖 Voor uitgebreide instructies**: Zie **[KUBECONFIG_SETUP.md](KUBECONFIG_SETUP.md)**
 
 ---
 

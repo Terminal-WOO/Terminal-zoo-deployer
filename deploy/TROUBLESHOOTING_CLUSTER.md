@@ -198,7 +198,7 @@ Als je cluster niet werkt, maak een nieuwe aan:
 
 2. **Maak nieuwe cluster aan**
    - Kubernetes → Kapsule → Create Cluster
-   - Volg: **[K8S_CLUSTER_SETUP.md](K8S_CLUSTER_SETUP.md)**
+   - Maak een nieuwe cluster aan via je cloud provider console
 
 3. **Belangrijk**: Zorg dat je een **node pool aanmaakt** tijdens cluster creation!
 
