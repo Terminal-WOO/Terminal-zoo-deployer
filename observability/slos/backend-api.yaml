@@ -1,0 +1,48 @@
+# Backend API SLO
+# Service: go-backend
+# Target: 99.5% availability over 30 days
+
+service: go-backend
+slo_name: api_availability
+slo_target: 0.995  # 99.5%
+slo_window: 30d
+error_budget: 0.005  # 0.5% = 3.6 hours per month
+
+slis:
+  - name: successful_requests_percentage
+    description: "Percentage of successful API requests"
+    query: |
+      sum(rate(platform_api_requests_total{service="go-backend",status="success"}[5m])) / 
+      sum(rate(platform_api_requests_total{service="go-backend"}[5m]))
+    target: 0.995
+    
+  - name: p95_latency
+    description: "95th percentile API response time"
+    query: |
+      histogram_quantile(0.95, rate(platform_api_request_duration_seconds_bucket{service="go-backend"}[5m]))
+    target: 0.2  # 200ms
+
+alerts:
+  - name: error_rate_high
+    description: "API error rate is high"
+    condition: |
+      error_rate > 0.01  # > 1%
+    severity: warning
+    
+  - name: latency_high
+    description: "API latency is high"
+    condition: |
+      p95_latency > 0.5  # > 500ms
+    severity: warning
+    
+  - name: error_budget_depleted
+    description: "Error budget is depleted"
+    condition: |
+      error_budget_remaining <= 0
+    severity: critical
+
+labels:
+  team: platform-engineering
+  service: go-backend
+  environment: production
+

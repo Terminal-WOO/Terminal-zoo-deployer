@@ -1,0 +1,107 @@
+# Namespace-Level Deployment Pipeline
+# This is a reusable GitHub Actions workflow for namespace-level deployments
+
+name: Namespace Deployment Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      namespace:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+        default: 'production'
+      image_tag:
+        required: false
+        type: string
+
+jobs:
+  validate-manifests:
+    name: Validate Kubernetes Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Validate manifests with kubeval
+        run: |
+          # Install kubeval if not available
+          if ! command -v kubeval &> /dev/null; then
+            wget -q https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+            tar xf kubeval-linux-amd64.tar.gz
+            sudo mv kubeval /usr/local/bin/
+          fi
+          
+          # Validate all manifests
+          kubeval k8s/*.yaml --strict
+
+      - name: Validate with kubectl dry-run
+        run: |
+          kubectl apply --dry-run=client -f k8s/namespace.yaml
+          kubectl apply --dry-run=client -f k8s/configmap.yaml
+          kubectl apply --dry-run=client -f k8s/frontend-deployment.yaml
+          kubectl apply --dry-run=client -f k8s/backend-deployment.yaml
+
+  deploy-namespace:
+    name: Deploy to Namespace
+    needs: validate-manifests
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Scaleway CLI
+        uses: scaleway/scaleway-cli-action@v1
+        with:
+          secret-key: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          access-key: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure kubectl
+        run: |
+          scw k8s kubeconfig install ${{ secrets.SCALEWAY_K8S_CLUSTER_ID }} --write-to-file
+          kubectl get nodes
+
+      - name: Apply namespace
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      - name: Apply ConfigMap
+        run: |
+          kubectl apply -f k8s/configmap.yaml
+
+      - name: Update image tags
+        if: inputs.image_tag != ''
+        run: |
+          sed -i "s|image:.*ai-co:.*|image: rg.nl-ams.scw.cloud/nl-appstore-registry/ai-co:${{ inputs.image_tag }}|g" k8s/frontend-deployment.yaml
+          sed -i "s|image:.*ai-co:.*|image: rg.nl-ams.scw.cloud/nl-appstore-registry/ai-co:${{ inputs.image_tag }}|g" k8s/backend-deployment.yaml
+
+      - name: Apply deployments
+        run: |
+          kubectl apply -f k8s/frontend-deployment.yaml
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/frontend-service.yaml
+          kubectl apply -f k8s/backend-service.yaml
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/nuxt-frontend -n ${{ inputs.namespace }} --timeout=5m
+          kubectl rollout status deployment/go-backend -n ${{ inputs.namespace }} --timeout=5m
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n ${{ inputs.namespace }}
+          kubectl get services -n ${{ inputs.namespace }}
+

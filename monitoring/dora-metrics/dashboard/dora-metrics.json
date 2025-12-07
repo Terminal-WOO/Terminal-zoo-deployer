@@ -1,0 +1,205 @@
+{
+  "dashboard": {
+    "title": "DORA Metrics - Platform Engineering",
+    "description": "Dashboard voor DORA (DevOps Research and Assessment) Four Key Metrics",
+    "tags": ["dora", "platform", "metrics"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Deployment Frequency (per dag)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(platform_deployments_total[24h]) * 86400",
+            "legendFormat": "Deployments per dag"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 1, "color": "yellow" },
+                { "value": 10, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 }
+      },
+      {
+        "id": 2,
+        "title": "Lead Time for Changes (gemiddeld)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(platform_lead_time_seconds) / 3600",
+            "legendFormat": "Uren"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "hr",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 2, "color": "yellow" },
+                { "value": 24, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 }
+      },
+      {
+        "id": 3,
+        "title": "Change Failure Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(sum(rate(platform_deployment_failures_total[7d])) / sum(rate(platform_deployments_total[7d]))) * 100",
+            "legendFormat": "Percentage"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 5, "color": "yellow" },
+                { "value": 15, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 }
+      },
+      {
+        "id": 4,
+        "title": "Mean Time to Recovery (MTTR)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(platform_recovery_time_seconds) / 60",
+            "legendFormat": "Minuten"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "m",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 30, "color": "yellow" },
+                { "value": 60, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 }
+      },
+      {
+        "id": 5,
+        "title": "Deployment Frequency Over Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(platform_deployments_total[1h])",
+            "legendFormat": "Deployments per uur"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
+      },
+      {
+        "id": 6,
+        "title": "Lead Time Distribution",
+        "type": "histogram",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(platform_lead_time_seconds_bucket[5m]))",
+            "legendFormat": "P95 Lead Time"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(platform_lead_time_seconds_bucket[5m]))",
+            "legendFormat": "P50 Lead Time"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
+      },
+      {
+        "id": 7,
+        "title": "Deployment Success vs Failure Rate",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum(rate(platform_deployments_total{status=\"success\"}[7d]))",
+            "legendFormat": "Success"
+          },
+          {
+            "expr": "sum(rate(platform_deployment_failures_total[7d]))",
+            "legendFormat": "Failure"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 8, "x": 0, "y": 16 }
+      },
+      {
+        "id": 8,
+        "title": "MTTR Over Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg_over_time(platform_recovery_time_seconds[1h]) / 60",
+            "legendFormat": "MTTR (minuten)"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 8, "x": 8, "y": 16 }
+      },
+      {
+        "id": 9,
+        "title": "DORA Performance Level",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "platform_dora_performance_level",
+            "legendFormat": "Performance Level"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 4,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red", "label": "Low" },
+                { "value": 1, "color": "orange", "label": "Medium" },
+                { "value": 2, "color": "yellow", "label": "High" },
+                { "value": 3, "color": "green", "label": "Elite" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 8, "w": 8, "x": 16, "y": 16 }
+      }
+    ],
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h"]
+    }
+  }
+}
+

@@ -1,0 +1,43 @@
+# Deployment Success Rate SLO
+# Service: platform-deployments
+# Target: 95% success rate over 7 days
+
+service: platform-deployments
+slo_name: deployment_success_rate
+slo_target: 0.95  # 95%
+slo_window: 7d
+error_budget: 0.05  # 5%
+
+slis:
+  - name: deployment_success_percentage
+    description: "Percentage of successful deployments"
+    query: |
+      sum(rate(platform_deployments_total{status="success"}[1h])) / 
+      sum(rate(platform_deployments_total[1h]))
+    target: 0.95
+    
+  - name: deployment_failure_rate
+    description: "Deployment failure rate"
+    query: |
+      sum(rate(platform_deployment_failures_total[1h])) / 
+      sum(rate(platform_deployments_total[1h]))
+    target: 0.05  # < 5%
+
+alerts:
+  - name: deployment_failure_rate_high
+    description: "Deployment failure rate is high"
+    condition: |
+      deployment_failure_rate > 0.1  # > 10%
+    severity: warning
+    
+  - name: error_budget_depleted
+    description: "Error budget is depleted"
+    condition: |
+      error_budget_remaining <= 0
+    severity: critical
+
+labels:
+  team: platform-engineering
+  service: platform-deployments
+  environment: production
+

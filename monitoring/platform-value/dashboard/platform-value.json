@@ -1,0 +1,303 @@
+{
+  "dashboard": {
+    "title": "Platform Value Metrics",
+    "description": "Dashboard voor platform value metrics: developer experience en business outcomes",
+    "tags": ["platform", "value", "developer-experience"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "1m",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Time to First Deployment",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(platform_time_to_first_deployment_minutes)",
+            "legendFormat": "Minuten"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "m",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 15, "color": "yellow" },
+                { "value": 60, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 }
+      },
+      {
+        "id": 2,
+        "title": "Self-Service Adoption Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(sum(platform_self_service_deployments_total) / sum(platform_deployments_total)) * 100",
+            "legendFormat": "Percentage"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 50, "color": "yellow" },
+                { "value": 80, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 }
+      },
+      {
+        "id": 3,
+        "title": "Developer Satisfaction Score",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(platform_developer_satisfaction_score)",
+            "legendFormat": "Score"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 1,
+            "min": 1,
+            "max": 5,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 3, "color": "yellow" },
+                { "value": 4, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 }
+      },
+      {
+        "id": 4,
+        "title": "Cognitive Load Score",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(platform_cognitive_load_score)",
+            "legendFormat": "Score"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 1,
+            "min": 1,
+            "max": 10,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 5, "color": "yellow" },
+                { "value": 8, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 }
+      },
+      {
+        "id": 5,
+        "title": "Platform Availability",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(1 - (sum(rate(platform_uptime_seconds_total[30d])) / 2592000)) * 100",
+            "legendFormat": "Uptime %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 3,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 99, "color": "yellow" },
+                { "value": 99.9, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 0, "y": 6 }
+      },
+      {
+        "id": 6,
+        "title": "API Response Time (P95)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(platform_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "Milliseconden"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "green" },
+                { "value": 200, "color": "yellow" },
+                { "value": 500, "color": "red" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 6, "y": 6 }
+      },
+      {
+        "id": 7,
+        "title": "Deployment Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(sum(rate(platform_deployments_total{status=\"success\"}[7d])) / sum(rate(platform_deployments_total[7d]))) * 100",
+            "legendFormat": "Percentage"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 90, "color": "yellow" },
+                { "value": 95, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 12, "y": 6 }
+      },
+      {
+        "id": 8,
+        "title": "Documentation Usage Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(sum(platform_documentation_users_total) / sum(platform_total_users)) * 100",
+            "legendFormat": "Percentage"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 50, "color": "yellow" },
+                { "value": 70, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 6, "w": 6, "x": 18, "y": 6 }
+      },
+      {
+        "id": 9,
+        "title": "Developer Satisfaction Trend",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg_over_time(platform_developer_satisfaction_score[1d])",
+            "legendFormat": "Satisfaction Score"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 }
+      },
+      {
+        "id": 10,
+        "title": "Time to First Deployment Distribution",
+        "type": "histogram",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(platform_time_to_first_deployment_minutes_bucket[7d]))",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(platform_time_to_first_deployment_minutes_bucket[7d]))",
+            "legendFormat": "P50"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 }
+      },
+      {
+        "id": 11,
+        "title": "Self-Service vs Manual Deployments",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum(platform_self_service_deployments_total)",
+            "legendFormat": "Self-Service"
+          },
+          {
+            "expr": "sum(platform_manual_deployments_total)",
+            "legendFormat": "Manual"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 8, "x": 0, "y": 20 }
+      },
+      {
+        "id": 12,
+        "title": "Platform Availability Over Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg_over_time(platform_uptime_percentage[1h])",
+            "legendFormat": "Uptime %"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 8, "x": 8, "y": 20 }
+      },
+      {
+        "id": 13,
+        "title": "API Response Time Distribution",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(platform_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "P95 (ms)"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(platform_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "P50 (ms)"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 8, "x": 16, "y": 20 }
+      }
+    ],
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["30s", "1m", "5m", "15m", "30m", "1h"]
+    }
+  }
+}
+

@@ -16,6 +16,34 @@ De applicatie bestaat uit:
 - Snelle en veilige implementaties
 - Kubernetes-native deployment
 
+## 📚 Platform Engineering Documentatie
+
+Dit platform is gebouwd volgens de principes uit "Effective Platform Engineering" met **10 modules** verdeeld over **3 fasen**.
+
+### 🚀 Quick Start
+
+- **[Platform Engineering Overview](docs/PLATFORM_ENGINEERING_OVERVIEW.md)** - Hoofdnavigatie met alle links
+- **[Executive Summary](docs/PLATFORM_ENGINEERING_SUMMARY.md)** - Snelle samenvatting
+- **[Platform Engineering Modules](deploy/PLATFORM_ENGINEERING_MODULES.md)** - Volledige module beschrijvingen
+
+### 📖 Belangrijkste Documentatie
+
+**Foundation**:
+- [Platform Visie](docs/platform-vision.md) - Visie, missie en doelen
+- [Platform Roadmap](docs/platform-roadmap.md) - Strategische roadmap
+- [Platform Domains](docs/platform-domains.md) - Product domains
+- [Architecture Decisions](docs/architecture-decisions/README.md) - ADRs
+
+**Building**:
+- [Governance Framework](docs/governance-framework.md) - Governance en compliance
+- [Observability Guide](docs/observability-guide.md) - Observability platform
+- [Infrastructure Guide](docs/infrastructure-guide.md) - Infrastructure as code
+
+**Scaling**:
+- [Scaling Architecture](docs/scaling-architecture.md) - Scaling strategieën
+- [Product Evolution](docs/product-evolution.md) - Platform evolutie
+- [Developer Experience](docs/developer-experience.md) - DevEx improvements
+
 ## Setup
 
 Make sure to install dependencies:

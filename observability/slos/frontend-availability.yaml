@@ -1,0 +1,35 @@
+# Frontend Availability SLO
+# Service: nuxt-frontend
+# Target: 99.9% availability over 30 days
+
+service: nuxt-frontend
+slo_name: availability
+slo_target: 0.999  # 99.9%
+slo_window: 30d
+error_budget: 0.001  # 0.1% = 43.2 minutes per month
+
+slis:
+  - name: uptime_percentage
+    description: "Percentage of time service is available"
+    query: |
+      sum(rate(platform_uptime_seconds_total{service="nuxt-frontend"}[5m])) / 2592000
+    target: 0.999
+
+alerts:
+  - name: error_budget_burn_rate_high
+    description: "Error budget burn rate is high"
+    condition: |
+      error_budget_burn_rate > 2
+    severity: warning
+    
+  - name: error_budget_depleted
+    description: "Error budget is depleted"
+    condition: |
+      error_budget_remaining <= 0
+    severity: critical
+
+labels:
+  team: platform-engineering
+  service: nuxt-frontend
+  environment: production
+

@@ -1,0 +1,209 @@
+{
+  "dashboard": {
+    "title": "Platform Observability - Single Pane of Glass",
+    "description": "Unified observability dashboard voor het App Store platform",
+    "tags": ["observability", "platform", "single-pane"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Platform Health Status",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up{job=\"platform\"}",
+            "legendFormat": "Status"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              { "options": { "0": { "text": "DOWN", "color": "red" } }, "type": "value" },
+              { "options": { "1": { "text": "UP", "color": "green" } }, "type": "value" }
+            ]
+          }
+        },
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 }
+      },
+      {
+        "id": 2,
+        "title": "Frontend Availability",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(platform_uptime_seconds_total{service=\"nuxt-frontend\"}[5m])) / 2592000",
+            "legendFormat": "Availability"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "decimals": 3,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 0.99, "color": "yellow" },
+                { "value": 0.999, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 }
+      },
+      {
+        "id": 3,
+        "title": "Backend API Availability",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(platform_api_requests_total{service=\"go-backend\",status=\"success\"}[5m])) / sum(rate(platform_api_requests_total{service=\"go-backend\"}[5m]))",
+            "legendFormat": "Availability"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "decimals": 3,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 0.99, "color": "yellow" },
+                { "value": 0.995, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 }
+      },
+      {
+        "id": 4,
+        "title": "Deployment Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(rate(platform_deployments_total{status=\"success\"}[1h])) / sum(rate(platform_deployments_total[1h]))",
+            "legendFormat": "Success Rate"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 0.90, "color": "yellow" },
+                { "value": 0.95, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 }
+      },
+      {
+        "id": 5,
+        "title": "SLO Compliance Overview",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "slo_compliance{service=~\"nuxt-frontend|go-backend|platform-deployments\"}",
+            "legendFormat": "{{service}} - {{slo_name}}"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 }
+      },
+      {
+        "id": 6,
+        "title": "Error Budget Status",
+        "type": "bargauge",
+        "targets": [
+          {
+            "expr": "error_budget_remaining{service=~\"nuxt-frontend|go-backend|platform-deployments\"}",
+            "legendFormat": "{{service}}"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 }
+      },
+      {
+        "id": 7,
+        "title": "Platform Metrics Overview",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(platform_api_requests_total[5m])",
+            "legendFormat": "{{service}} - {{status}}"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 }
+      },
+      {
+        "id": 8,
+        "title": "API Response Time (P95)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(platform_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "{{service}} P95 (ms)"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 }
+      },
+      {
+        "id": 9,
+        "title": "Recent Deployments",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "platform_deployments_total",
+            "legendFormat": "{{namespace}} - {{deployment}}"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 }
+      },
+      {
+        "id": 10,
+        "title": "Active Alerts",
+        "type": "alertlist",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 }
+      },
+      {
+        "id": 11,
+        "title": "DORA Metrics Summary",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(platform_deployments_total[24h]) * 86400",
+            "legendFormat": "Deployments/day"
+          },
+          {
+            "expr": "avg(platform_lead_time_seconds) / 3600",
+            "legendFormat": "Lead Time (hours)"
+          },
+          {
+            "expr": "(sum(rate(platform_deployment_failures_total[7d])) / sum(rate(platform_deployments_total[7d]))) * 100",
+            "legendFormat": "Failure Rate %"
+          },
+          {
+            "expr": "avg(platform_recovery_time_seconds) / 60",
+            "legendFormat": "MTTR (minutes)"
+          }
+        ],
+        "gridPos": { "h": 6, "w": 24, "x": 0, "y": 28 }
+      }
+    ],
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h"]
+    }
+  }
+}
+

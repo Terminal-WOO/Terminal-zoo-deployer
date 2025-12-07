@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Engineering - Mockup</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                    <span>Platform Engineering</span>
+                </div>
+                <nav class="nav">
+                    <a href="#overview" class="nav-link">Overzicht</a>
+                    <a href="#modules" class="nav-link">Modules</a>
+                    <a href="#metrics" class="nav-link">Metrics</a>
+                    <a href="#docs" class="nav-link">Documentatie</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Platform Engineering Mockup</h1>
+            <p class="hero-subtitle">Visualisatie van alle 10 Platform Engineering modules</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Voltooid</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Fasen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Documenten</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="section">
+        <div class="container">
+            <h2 class="section-title">Platform Overzicht</h2>
+            <div class="phases-grid">
+                <!-- Fase 1: Foundation -->
+                <div class="phase-card phase-foundation">
+                    <div class="phase-header">
+                        <i class="fas fa-building"></i>
+                        <h3>Fase 1: Foundation</h3>
+                        <span class="badge badge-success">Voltooid</span>
+                    </div>
+                    <div class="phase-content">
+                        <p>Fundamenten leggen voor platform engineering</p>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> Module 1.1: Platform Engineering Fundamentals</li>
+                            <li><i class="fas fa-check-circle"></i> Module 1.2: Software-Defined Platform Architecture</li>
+                            <li><i class="fas fa-check-circle"></i> Module 1.3: Metrics & Measurement Framework</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Fase 2: Building -->
+                <div class="phase-card phase-building">
+                    <div class="phase-header">
+                        <i class="fas fa-tools"></i>
+                        <h3>Fase 2: Building</h3>
+                        <span class="badge badge-warning">Grotendeels Voltooid</span>
+                    </div>
+                    <div class="phase-content">
+                        <p>Core platform capabilities bouwen</p>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> Module 2.1: Governance, Compliance & Trust</li>
+                            <li><i class="fas fa-check-circle"></i> Module 2.2: Evolutionary Observability Platform</li>
+                            <li><i class="fas fa-check-circle"></i> Module 2.3: Software-Defined Infrastructure Platform</li>
+                            <li><i class="fas fa-clock"></i> Module 2.4: Platform Control Plane Foundations</li>
+                            <li><i class="fas fa-clock"></i> Module 2.5: Control Plane Services & Extensions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Fase 3: Scaling -->
+                <div class="phase-card phase-scaling">
+                    <div class="phase-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Fase 3: Scaling</h3>
+                        <span class="badge badge-success">Voltooid</span>
+                    </div>
+                    <div class="phase-content">
+                        <p>Platform schalen en evolueren</p>
+                        <ul class="module-list">
+                            <li><i class="fas fa-check-circle"></i> Module 3.1: Architecture for Scale</li>
+                            <li><i class="fas fa-check-circle"></i> Module 3.2: Platform Product Evolution</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section id="modules" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Alle Modules</h2>
+            <div class="modules-grid" id="modulesGrid">
+                <!-- Modules worden hier dynamisch geladen -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="section">
+        <div class="container">
+            <h2 class="section-title">Success Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="metric-content">
+                        <h3>Deployment Frequency</h3>
+                        <div class="metric-value">> 10/dag</div>
+                        <p class="metric-target">Target: Elite performance</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                    <div class="metric-content">
+                        <h3>Lead Time</h3>
+                        <div class="metric-value">< 2 uur</div>
+                        <p class="metric-target">Target: Elite performance</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="metric-content">
+                        <h3>Change Failure Rate</h3>
+                        <div class="metric-value">< 5%</div>
+                        <p class="metric-target">Target: Elite performance</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="metric-content">
+                        <h3>MTTR</h3>
+                        <div class="metric-value">< 30 min</div>
+                        <p class="metric-target">Target: Elite performance</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-smile"></i></div>
+                    <div class="metric-content">
+                        <h3>Developer Satisfaction</h3>
+                        <div class="metric-value">> 4.0/5.0</div>
+                        <p class="metric-target">Target: High satisfaction</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-brain"></i></div>
+                    <div class="metric-content">
+                        <h3>Cognitive Load</h3>
+                        <div class="metric-value">< 5.0/10.0</div>
+                        <p class="metric-target">Target: Low cognitive load</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Documentatie</h2>
+            <div class="docs-grid">
+                <div class="doc-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Platform Engineering Overview</h3>
+                    <p>Hoofdnavigatie met alle links naar modules en documentatie</p>
+                    <a href="javascript:void(0)" onclick="openDoc('docs/PLATFORM_ENGINEERING_OVERVIEW.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+                <div class="doc-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Executive Summary</h3>
+                    <p>Snelle samenvatting voor managers en stakeholders</p>
+                    <a href="javascript:void(0)" onclick="openDoc('docs/PLATFORM_ENGINEERING_SUMMARY.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+                <div class="doc-card">
+                    <i class="fas fa-list"></i>
+                    <h3>Platform Engineering Modules</h3>
+                    <p>Volledige beschrijving van alle 10 modules</p>
+                    <a href="javascript:void(0)" onclick="openDoc('deploy/PLATFORM_ENGINEERING_MODULES.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+                <div class="doc-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Metrics Framework</h3>
+                    <p>DORA metrics, platform value metrics, cognitive load</p>
+                    <a href="javascript:void(0)" onclick="openDoc('docs/metrics-framework.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+                <div class="doc-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>Observability Guide</h3>
+                    <p>Observability principes, SLOs, LGTM stack</p>
+                    <a href="javascript:void(0)" onclick="openDoc('docs/observability-guide.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+                <div class="doc-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Governance Framework</h3>
+                    <p>Governance lagen, policy-as-code, compliance</p>
+                    <a href="javascript:void(0)" onclick="openDoc('docs/governance-framework.md')" class="doc-link">Bekijk documentatie →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Platform Engineering</h4>
+                    <p>Gebouwd volgens de principes uit "Effective Platform Engineering"</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick="openDoc('docs/PLATFORM_ENGINEERING_OVERVIEW.md')">Overview</a></li>
+                        <li><a href="javascript:void(0)" onclick="openDoc('docs/PLATFORM_ENGINEERING_SUMMARY.md')">Summary</a></li>
+                        <li><a href="javascript:void(0)" onclick="openDoc('deploy/PLATFORM_ENGINEERING_MODULES.md')">Modules</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Status</h4>
+                    <p>8 van 10 modules voltooid (80%)</p>
+                    <p>23 documentatie bestanden</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Platform Engineering Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
+
